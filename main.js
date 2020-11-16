@@ -25,16 +25,12 @@ form.addEventListener('change', (e) => {
   let title, author, pages, status;
   if (e.target.id === 'title') {
     title = e.target.value;
-    console.log(title);
   } else if (e.target.id === 'author') {
     author = e.target.value;
-    console.log(author);
   } else if (e.target.id === 'number') {
     pages = e.target.value;
-    console.log(pages);
   } else {
     status = e.target.checked;
-    console.log(status);
   }
 })
 
