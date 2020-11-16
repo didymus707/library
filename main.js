@@ -7,12 +7,12 @@ function Book(author, title, pageNumber) {
   this.read = false
 }
 
-function addBookToLibrary(book) {
-  myLibrary.push(book);
+Book.prototype.readStatus = function () {
+  this.read = !this.read
 }
 
-function bookForm() {
-  document
+function addBookToLibrary(book) {
+  myLibrary.push(book);
 }
 
 function removeBookFromLibrary(index) {
