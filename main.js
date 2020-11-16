@@ -1,6 +1,9 @@
 let myLibrary = [];
 let newBook = document.querySelector('.new-book');
 let form = document.querySelector('.form-for-book');
+let title = document.querySelector('input[type=text]');
+let pages = document.querySelector('input[type=number]');
+let read = document.querySelector('input[type=checkbox]');
 
 newBook.addEventListener('click', () => {
   form.classList.toggle('hide');
