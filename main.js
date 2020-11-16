@@ -7,6 +7,14 @@ function Book(author, title, pageNumber) {
   this.read = false
 }
 
-function addBookToLibrary() {
+function addBookToLibrary(book) {
+  myLibrary.push(book);
+}
 
+function bookForm() {
+  document
+}
+
+function removeBookFromLibrary(index) {
+  myLibrary.splice(index, 1);
 }
