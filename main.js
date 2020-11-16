@@ -1,4 +1,10 @@
 let myLibrary = [];
+let newBook = document.querySelector('.new-book');
+let form = document.querySelector('.form-for-book');
+
+newBook.addEventListener('click', () => {
+  form.classList.toggle('hide');
+})
 
 function Book(author, title, pageNumber) {
   this.author = author
@@ -15,6 +21,7 @@ let book = new Book('J.R.R. Tolkien', 'The Hobbit', 295);
 
 function addBookToLibrary(book) {
   myLibrary.push(book);
+  return myLibrary;
 }
 
 function showBook() {
