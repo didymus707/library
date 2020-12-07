@@ -17,7 +17,8 @@ Book.prototype.readStatus = function () {
   this.read = !this.read
 }
 
-newBook.addEventListener('click', () => {
+newBook.addEventListener('click', (e) => {
+  e.target.textContent === 'Add a new book' ? e.target.textContent = 'Close' : e.target.textContent = 'Add a new book'
   form.classList.toggle('hide');
 })
 
