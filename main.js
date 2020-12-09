@@ -52,10 +52,11 @@ btn.addEventListener('click', (e) => {
   closeWithSubmit();
 });
 
-function showBook() {
+const showBook = () => {
   const bookDiv = document.createElement('div');
   myLibrary.forEach((book, i) => {
     bookDiv.setAttribute('class', `book${i}`);
+    bookDiv.setAttribute('data-index', `${i}`);
     bookDiv.innerHTML = `
       <div class="card" style="width: 18rem;">
         <div class="card-header">
@@ -73,6 +74,30 @@ function showBook() {
   books.append(bookDiv);
 }
 
-function removeBookFromLibrary(index) {
-  myLibrary.splice(index, 1);
+const removeBookFromLibrary = index => {
+  myLibrary.splice(index, 1); 
+  const ele = document.querySelector(`.book${index}`);
+  ele.remove();
 }
+
+const changeStatus = (index, e) => {
+  const check = myLibrary[index].read;
+  console.log(check);
+  if (check) {
+    myLibrary[index].readStatus();
+    e.target.textContent = 'False'
+  } else {
+    myLibrary[index].readStatus();
+    e.target.textContent = 'True';
+  }
+}
+
+books.addEventListener('click', (e) => {
+  const index = e.path[3].dataset.index;
+  const target = e.target.textContent;
+  if (target === 'Remove Book') {
+    removeBookFromLibrary(index);
+  } else {
+    changeStatus(index, e);
+  }
+})
