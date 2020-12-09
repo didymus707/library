@@ -77,12 +77,12 @@ const showBook = () => {
 const removeBookFromLibrary = index => {
   myLibrary.splice(index, 1); 
   const ele = document.querySelector(`.book${index}`);
+  console.log(ele);
   ele.remove();
 }
 
 const changeStatus = (index, e) => {
   const check = myLibrary[index].read;
-  console.log(check);
   if (check) {
     myLibrary[index].readStatus();
     e.target.textContent = 'False'
@@ -93,10 +93,13 @@ const changeStatus = (index, e) => {
 }
 
 books.addEventListener('click', (e) => {
-  const index = e.path[3].dataset.index;
+  const dataIndex = e.path[3].dataset.index;
+  const parentChildren = e.path[4].children
+  const parent = e.target.offsetParent.parentElement;
+  const index = [...parentChildren].indexOf(parent);
   const target = e.target.textContent;
   if (target === 'Remove Book') {
-    removeBookFromLibrary(index);
+    removeBookFromLibrary(dataIndex);
   } else {
     changeStatus(index, e);
   }
