@@ -64,8 +64,8 @@ function showBook() {
         <div class="card-body">
           <h6 class="card-subtitle mb-2 text-muted">${book.author}</h6>
           <p class="card-text">${book.pages}</p>
-          <a href="#" class="btn btn-primary text-center">${book.read}</a>
-          <a href="#" class="btn btn-danger text-center">Remove Book</a>
+          <a href="#" class="status btn btn-primary text-center">${book.read}</a>
+          <a href="#" class="remove btn btn-danger text-center">Remove Book</a>
         </div>
       </div>
     `;
