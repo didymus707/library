@@ -77,6 +77,7 @@ const showBookOnLoad = () => {
   lib.forEach((book, i) => {
     const bookDiv = document.createElement('div');
     bookDiv.setAttribute('class', `book${i}`);
+    bookDiv.setAttribute('class', 'mb-3');
     bookDiv.setAttribute('data-index', `${i}`);
     bookDiv.innerHTML = `
       <div class="card" style="width: 18rem;">
@@ -101,6 +102,7 @@ const showBook = () => {
   const len = lib.length;
   const bookDiv = document.createElement('div');
   bookDiv.setAttribute('class', `book${len - 1}`);
+  bookDiv.setAttribute('class', 'mb-3');
   bookDiv.setAttribute('data-index', `${len - 1}`);
   bookDiv.innerHTML = `
     <div class="card" style="width: 18rem;">
