@@ -62,7 +62,6 @@ const getInputValues = (book) => {
 }
 
 btn.addEventListener('click', (e) => {
-  // e.preventDefault();
   const book = Book();
   getInputValues(book);
   addBookToLibrary(book);
@@ -76,8 +75,7 @@ const showBookOnLoad = () => {
   if (!lib) return;
   lib.forEach((book, i) => {
     const bookDiv = document.createElement('div');
-    bookDiv.setAttribute('class', `book${i}`);
-    bookDiv.setAttribute('class', 'mb-3');
+    bookDiv.setAttribute('class', `book${i} mb-3`);
     bookDiv.setAttribute('data-index', `${i}`);
     bookDiv.innerHTML = `
       <div class="card" style="width: 18rem;">
@@ -101,8 +99,7 @@ const showBook = () => {
   if (!lib) return;
   const len = lib.length;
   const bookDiv = document.createElement('div');
-  bookDiv.setAttribute('class', `book${len - 1}`);
-  bookDiv.setAttribute('class', 'mb-3');
+  bookDiv.setAttribute('class', `book${len - 1} mb-3`);
   bookDiv.setAttribute('data-index', `${len - 1}`);
   bookDiv.innerHTML = `
     <div class="card" style="width: 18rem;">
@@ -124,8 +121,8 @@ const showBook = () => {
 
 const removeBookFromLibrary = index => {
   const lib = setPrototype();
-  lib.splice(index, 1); 
   const ele = document.querySelector(`.book${index}`);
+  lib.splice(index, 1);
   addToLocalStorage(lib);
   ele.remove();
 }
@@ -135,18 +132,25 @@ const readNotRead = (index, e) => {
   const check = lib[index].read;
   console.log(check)
   if (check) {
-    console.log(lib[index]);
     lib[index].readStatus();
-    // e.target.textContent = 'False'
+    e.target.textContent = 'False';
+    addToLocalStorage(lib);
   } else {
-    console.log(lib[index])
     console.log(lib[index].readStatus());
-    // e.target.textContent = 'True';
+    e.target.textContent = 'True';
+    addToLocalStorage(lib);
   }
 }
 
 books.addEventListener('click', e => {
   const parent = e.target.offsetParent.parentElement;
   const index = parent.dataset.index;
-  readNotRead(index, e);
+  console.log(index);
+  const target = e.target.textContent;
+  if (target === 'Remove Book') {
+    removeBookFromLibrary(index);
+  } else {
+    // readNotRead(index, e);
+    console.log('changing');
+  }
 });
