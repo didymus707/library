@@ -8,21 +8,40 @@ let author = document.querySelector('.author');
 let pages = document.querySelector('input[type=number]');
 let read = document.querySelector('input[type=checkbox]');
 const btn = document.querySelector('button[type=submit]');
+const getStatus = () => document.querySelector('.status');
+const removeBook = () => document.querySelector('.remove');
 
-function Book(title, author, pages) {
-  this.title = title
-  this.author = author
-  this.pages = pages
-  this.read = false
+const Book = (title, author, pages, read) => {
+  const readStatus = () => !read;
+  return { title, author, pages, read, readStatus };
 }
+
+const addToLocalStorage = (bookStore) => {
+  if (!localStorage.books) {
+    localStorage.setItem('books', JSON.stringify(bookStore));
+  } else {
+    let retrievedLib = retriFromLocalStorage();
+    retrievedLib.push(bookStore.pop());
+    localStorage.setItem('books', JSON.stringify(retrievedLib));
+  }
+}
+
+const retriFromLocalStorage = () => JSON.parse(localStorage.books);
+
+const setPrototype = () => {
+  if (!localStorage.books) return;
+  let library = retriFromLocalStorage();
+  let retrievedLib = [];
+  library.forEach(book => {
+    retrievedLib.push(Object.assign(Book(), book));
+  });
+  return retrievedLib;
+};
 
 const addBookToLibrary = book => {
   myLibrary.push(book);
+  addToLocalStorage(myLibrary);
   return myLibrary;
-}
-
-Book.prototype.readStatus = function () {
-  this.read = !this.read
 }
 
 newBook.addEventListener('click', (e) => {
@@ -43,18 +62,20 @@ const getInputValues = (book) => {
 }
 
 btn.addEventListener('click', (e) => {
-  e.preventDefault();
-  const book = new Book(title, author, pages, read);
+  // e.preventDefault();
+  const book = Book();
   getInputValues(book);
-  console.log(addBookToLibrary(book));
+  addBookToLibrary(book);
   form.reset();
   showBook();
   closeWithSubmit();
 });
 
-const showBook = () => {
-  const bookDiv = document.createElement('div');
-  myLibrary.forEach((book, i) => {
+const showBookOnLoad = () => {
+  const lib = setPrototype();
+  if (!lib) return;
+  lib.forEach((book, i) => {
+    const bookDiv = document.createElement('div');
     bookDiv.setAttribute('class', `book${i}`);
     bookDiv.setAttribute('data-index', `${i}`);
     bookDiv.innerHTML = `
@@ -70,37 +91,60 @@ const showBook = () => {
         </div>
       </div>
     `;
+    books.appendChild(bookDiv);
   });
-  books.append(bookDiv);
+}
+
+const showBook = () => {
+  const lib = setPrototype();
+  if (!lib) return;
+  const len = lib.length;
+  const bookDiv = document.createElement('div');
+  bookDiv.setAttribute('class', `book${len - 1}`);
+  bookDiv.setAttribute('data-index', `${len - 1}`);
+  bookDiv.innerHTML = `
+    <div class="card" style="width: 18rem;">
+      <div class="card-header">
+        <h5 class="card-title">${lib[len - 1].title}</h5>
+      </div>
+      <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">${lib[len - 1].author}</h6>
+        <p class="card-text">${lib[len - 1].pages}</p>
+        <a href="#" class="status btn btn-primary text-center">${lib[len - 1].read}</a>
+        <a href="#" class="remove btn btn-danger text-center">Remove Book</a>
+      </div>
+    </div>
+  `;
+  lib.forEach((book, i) => {
+    books.appendChild(bookDiv); 
+  });
 }
 
 const removeBookFromLibrary = index => {
-  myLibrary.splice(index, 1); 
+  const lib = setPrototype();
+  lib.splice(index, 1); 
   const ele = document.querySelector(`.book${index}`);
-  console.log(ele);
+  addToLocalStorage(lib);
   ele.remove();
 }
 
-const changeStatus = (index, e) => {
-  const check = myLibrary[index].read;
+const readNotRead = (index, e) => {
+  const lib = setPrototype();
+  const check = lib[index].read;
+  console.log(check)
   if (check) {
-    myLibrary[index].readStatus();
-    e.target.textContent = 'False'
+    console.log(lib[index]);
+    lib[index].readStatus();
+    // e.target.textContent = 'False'
   } else {
-    myLibrary[index].readStatus();
-    e.target.textContent = 'True';
+    console.log(lib[index])
+    console.log(lib[index].readStatus());
+    // e.target.textContent = 'True';
   }
 }
 
-books.addEventListener('click', (e) => {
-  const dataIndex = e.path[3].dataset.index;
-  const parentChildren = e.path[4].children
+books.addEventListener('click', e => {
   const parent = e.target.offsetParent.parentElement;
-  const index = [...parentChildren].indexOf(parent);
-  const target = e.target.textContent;
-  if (target === 'Remove Book') {
-    removeBookFromLibrary(dataIndex);
-  } else {
-    changeStatus(index, e);
-  }
-})
+  const index = parent.dataset.index;
+  readNotRead(index, e);
+});
