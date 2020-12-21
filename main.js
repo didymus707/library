@@ -11,36 +11,33 @@ const btn = document.querySelector('button[type=submit]');
 const getStatus = () => document.querySelector('.status');
 const removeBook = () => document.querySelector('.remove');
 
+if (!localStorage.books) {
+  localStorage.setItem('books', JSON.stringify(myLibrary));
+} else {
+  myLibrary = JSON.parse(localStorage.books);
+}
+
 const Book = (title, author, pages, read) => {
   const readStatus = () => !read;
   return { title, author, pages, read, readStatus };
 }
 
-const addToLocalStorage = (bookStore) => {
-  if (!localStorage.books) {
-    localStorage.setItem('books', JSON.stringify(bookStore));
-  } else {
-    let retrievedLib = retriFromLocalStorage();
-    retrievedLib.push(bookStore.pop());
-    localStorage.setItem('books', JSON.stringify(retrievedLib));
-  }
+const addToLocalStorage = () => {
+  localStorage.setItem('books', JSON.stringify(myLibrary));
 }
 
-const retriFromLocalStorage = () => JSON.parse(localStorage.books);
-
 const setPrototype = () => {
-  if (!localStorage.books) return;
-  let library = retriFromLocalStorage();
   let retrievedLib = [];
-  library.forEach(book => {
+  myLibrary.forEach(book => {
     retrievedLib.push(Object.assign(Book(), book));
   });
+  console.log(retrievedLib);
   return retrievedLib;
 };
 
 const addBookToLibrary = book => {
   myLibrary.push(book);
-  addToLocalStorage(myLibrary);
+  addToLocalStorage();
   return myLibrary;
 }
 
@@ -120,10 +117,10 @@ const showBook = () => {
 }
 
 const removeBookFromLibrary = index => {
-  const lib = setPrototype();
+  myLibrary = setPrototype();
   const ele = document.querySelector(`.book${index}`);
-  lib.splice(index, 1);
-  addToLocalStorage(lib);
+  myLibrary.splice(index, 1);
+  addToLocalStorage();
   ele.remove();
 }
 
