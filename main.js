@@ -18,7 +18,7 @@ if (!localStorage.books) {
 }
 
 const Book = (title, author, pages, read) => {
-  const readStatus = () => !read;
+  const readStatus = () => read = !read;
   return { title, author, pages, read, readStatus };
 }
 
@@ -31,7 +31,6 @@ const setPrototype = () => {
   myLibrary.forEach(book => {
     retrievedLib.push(Object.assign(Book(), book));
   });
-  console.log(retrievedLib);
   return retrievedLib;
 };
 
@@ -75,14 +74,18 @@ const showBookOnLoad = () => {
     bookDiv.setAttribute('class', `book${i} mb-3`);
     bookDiv.setAttribute('data-index', `${i}`);
     bookDiv.innerHTML = `
-      <div class="card" style="width: 18rem;">
+      <div class="card" style="width: 25rem;">
         <div class="card-header">
-          <h5 class="card-title">${book.title}</h5>
+          <h5 class="card-title">Title: ${book.title}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Author: ${book.author}</h6>
         </div>
         <div class="card-body">
-          <h6 class="card-subtitle mb-2 text-muted">${book.author}</h6>
-          <p class="card-text">${book.pages}</p>
-          <a href="#" class="status btn btn-primary text-center">${book.read}</a>
+          <p class="card-text">Number of pages: ${book.pages}</p>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span>Are you done reading?:</span>
+            <span class="ans">${book.read ? 'Yes' : 'No'}</span>
+            <a href="#" class="status btn btn-primary text-center">Change Answer</a>
+          </div>
           <a href="#" class="remove btn btn-danger text-center">Remove Book</a>
         </div>
       </div>
@@ -93,20 +96,23 @@ const showBookOnLoad = () => {
 
 const showBook = () => {
   const lib = setPrototype();
-  if (!lib) return;
   const len = lib.length;
   const bookDiv = document.createElement('div');
   bookDiv.setAttribute('class', `book${len - 1} mb-3`);
   bookDiv.setAttribute('data-index', `${len - 1}`);
   bookDiv.innerHTML = `
-    <div class="card" style="width: 18rem;">
+    <div class="card" style="width: 25rem;">
       <div class="card-header">
-        <h5 class="card-title">${lib[len - 1].title}</h5>
+        <h5 class="card-title">Title: ${lib[len - 1].title}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Author: ${lib[len - 1].author}</h6>
       </div>
       <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">${lib[len - 1].author}</h6>
-        <p class="card-text">${lib[len - 1].pages}</p>
-        <a href="#" class="status btn btn-primary text-center">${lib[len - 1].read}</a>
+        <p class="card-text">Number of Pages: ${lib[len - 1].pages}</p>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <span>Are you done reading?:</span>
+          <span class="ans">${lib[len - 1].read ? 'Yes' : 'No'}</span>
+          <a href="#" class="status btn btn-primary text-center">Change Answer</a>
+        </div>
         <a href="#" class="remove btn btn-danger text-center">Remove Book</a>
       </div>
     </div>
@@ -124,30 +130,32 @@ const removeBookFromLibrary = index => {
   ele.remove();
 }
 
-const readNotRead = (index, e) => {
-  const lib = setPrototype();
-  const check = lib[index].read;
-  console.log(check)
+const changeStatus = (index, e) => {
+  myLibrary = setPrototype();
+  const check = myLibrary[index].read;
   if (check) {
-    lib[index].readStatus();
-    e.target.textContent = 'False';
-    addToLocalStorage(lib);
+    console.log(myLibrary[index].read);
+    myLibrary[index].readStatus();
+    console.log(myLibrary[index].read);
+    e.target.previousElementSibling.textContent = 'No';
+    localStorage.setItem('books', JSON.stringify(myLibrary));
   } else {
-    console.log(lib[index].readStatus());
-    e.target.textContent = 'True';
-    addToLocalStorage(lib);
+    console.log(myLibrary[index].read);
+    myLibrary[index].readStatus();
+    console.log(myLibrary[index].read);
+    e.target.previousElementSibling.textContent = 'Yes';
+    localStorage.setItem('books', JSON.stringify(myLibrary));
   }
 }
 
 books.addEventListener('click', e => {
   const parent = e.target.offsetParent.parentElement;
   const index = parent.dataset.index;
-  console.log(index);
-  const target = e.target.textContent;
-  if (target === 'Remove Book') {
+  const remove = e.target.classList.contains('remove');
+  const status = e.target.classList.contains('status');
+  if (remove) {
     removeBookFromLibrary(index);
-  } else {
-    // readNotRead(index, e);
-    console.log('changing');
+  } else if (status) {
+    changeStatus(index, e);
   }
 });
