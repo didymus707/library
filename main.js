@@ -136,15 +136,11 @@ const changeStatus = (index, e) => {
   myLibrary = setPrototype();
   const check = myLibrary[index].read;
   if (check) {
-    console.log(myLibrary[index].read);
     myLibrary[index].readStatus();
-    console.log(myLibrary[index].read);
     e.target.previousElementSibling.textContent = 'No';
     addToLocalStorage();
   } else {
-    console.log(myLibrary[index].read);
     myLibrary[index].readStatus();
-    console.log(myLibrary[index].read);
     e.target.previousElementSibling.textContent = 'Yes';
     addToLocalStorage();
   }
