@@ -18,7 +18,9 @@ if (!localStorage.books) {
 }
 
 const Book = (title, author, pages, read) => {
-  const readStatus = () => read = !read;
+  const readStatus = function () {
+    return this.read = !this.read;
+  };
   return { title, author, pages, read, readStatus };
 }
 
@@ -138,13 +140,13 @@ const changeStatus = (index, e) => {
     myLibrary[index].readStatus();
     console.log(myLibrary[index].read);
     e.target.previousElementSibling.textContent = 'No';
-    localStorage.setItem('books', JSON.stringify(myLibrary));
+    addToLocalStorage();
   } else {
     console.log(myLibrary[index].read);
     myLibrary[index].readStatus();
     console.log(myLibrary[index].read);
     e.target.previousElementSibling.textContent = 'Yes';
-    localStorage.setItem('books', JSON.stringify(myLibrary));
+    addToLocalStorage();
   }
 }
 
